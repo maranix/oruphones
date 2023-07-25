@@ -11,3 +11,11 @@ final class HomeListingsFetched extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
+
+final class HomeMoreListingsFetched extends HomeEvent {
+  const HomeMoreListingsFetched();
+
+  @override
+  List<Object?> get props => [];
+}
+

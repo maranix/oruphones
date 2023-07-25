@@ -9,5 +9,5 @@ sealed class AppState extends Equatable {
 
 final class AppInitial extends AppState {
   const AppInitial();
-
 }
+

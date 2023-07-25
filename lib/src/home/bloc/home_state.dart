@@ -15,6 +15,10 @@ final class HomeLoading extends HomeState {
   const HomeLoading();
 }
 
+final class HomeLoadingMore extends HomeState {
+  const HomeLoadingMore();
+}
+
 final class HomeLoaded extends HomeState {
   const HomeLoaded(this.data);
 
@@ -26,4 +30,12 @@ final class HomeLoaded extends HomeState {
 
 final class HomeFailed extends HomeState {
   const HomeFailed();
+}
+
+final class HomeTimeOutFailure extends HomeState {
+  const HomeTimeOutFailure();
+}
+
+final class HomeRequestFailure extends HomeState {
+  const HomeRequestFailure();
 }
