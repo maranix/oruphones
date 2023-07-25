@@ -40,6 +40,18 @@ final class ListingResponse extends Equatable {
     }
   }
 
+  ListingResponse copyWith({
+    List<Listing>? listings,
+    int? nextPage,
+    String? message,
+  }) {
+    return ListingResponse(
+      listings: listings ?? this.listings,
+      nextPage: nextPage ?? this.nextPage,
+      message: message ?? this.message,
+    );
+  }
+
   @override
   List<Object?> get props => [
         listings,
