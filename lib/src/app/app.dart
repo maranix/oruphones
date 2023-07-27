@@ -34,6 +34,7 @@ class _AppView extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           elevation: 0,
           backgroundColor: OruColors.primary,
+          iconTheme: IconThemeData(color: OruColors.appBarIcon),
         ),
         cardTheme: const CardTheme(
           elevation: 0,

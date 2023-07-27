@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:oruphones/src/presentation/notifications/notifications.dart";
 import "package:oruphones/src/ui/colors.dart";
 
 class AppBarNotificationsButton extends StatelessWidget {
@@ -7,7 +8,12 @@ class AppBarNotificationsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          NotificationsPage.route(),
+        );
+      },
       icon: const Icon(
         Icons.notifications,
       ),
