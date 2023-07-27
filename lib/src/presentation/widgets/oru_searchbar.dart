@@ -5,11 +5,15 @@ class OruSearchBar extends StatefulWidget {
   const OruSearchBar({
     super.key,
     this.onTap,
+    this.onChanged,
+    this.onLeadingTap,
     this.shouldFocusSearch = false,
   });
 
   final VoidCallback? onTap;
+  final VoidCallback? onLeadingTap;
   final bool shouldFocusSearch;
+  final void Function(String? text)? onChanged;
 
   @override
   State<OruSearchBar> createState() => _OruSearchBarState();
@@ -18,8 +22,6 @@ class OruSearchBar extends StatefulWidget {
 class _OruSearchBarState extends State<OruSearchBar> {
   late final TextEditingController _controller;
   FocusNode? _focusNode;
-
-  void _onChanged(String? text) {}
 
   @override
   void initState() {
@@ -46,9 +48,20 @@ class _OruSearchBarState extends State<OruSearchBar> {
     return SearchBar(
       focusNode: _focusNode,
       controller: _controller,
-      onChanged: _onChanged,
+      onChanged: widget.onChanged,
       onTap: widget.onTap,
       leading: const Icon(Icons.search),
+      trailing: [
+        GestureDetector(
+          onTap: () {
+            if (widget.onLeadingTap != null) {
+              _controller.clear();
+              widget.onLeadingTap!();
+            }
+          },
+          child: const Icon(Icons.cancel),
+        )
+      ],
       hintStyle: MaterialStatePropertyAll<TextStyle>(Theme.of(context).textTheme.bodyMedium!),
       padding: const MaterialStatePropertyAll<EdgeInsetsGeometry>(
         OruPadding.searchBarInner,

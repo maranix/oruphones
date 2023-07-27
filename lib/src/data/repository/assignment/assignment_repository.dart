@@ -80,6 +80,9 @@ final class AssignmentRepository extends Repository implements AssignmentI {
     try {
       final res = await client.post(
         uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: body,
       );
 

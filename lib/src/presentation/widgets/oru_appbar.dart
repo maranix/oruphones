@@ -10,12 +10,16 @@ class OruAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.iconColor = Colors.white,
     this.onSearchBarTap,
     this.shouldFocusSearchBar = false,
+    this.onSearchFieldChanged,
+    this.onSearchFieldLeadingPressed,
   });
 
   final double appBarHeight;
   final Color iconColor;
   final VoidCallback? onSearchBarTap;
   final bool shouldFocusSearchBar;
+  final void Function(String? text)? onSearchFieldChanged;
+  final VoidCallback? onSearchFieldLeadingPressed;
 
   @override
   Size get preferredSize => Size.fromHeight(appBarHeight);
@@ -52,7 +56,9 @@ class OruAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: OruPadding.searchBarOuter,
               child: OruSearchBar(
                 onTap: onSearchBarTap,
+                onChanged: onSearchFieldChanged,
                 shouldFocusSearch: shouldFocusSearchBar,
+                onLeadingTap: onSearchFieldLeadingPressed,
               ),
             ),
           ],
