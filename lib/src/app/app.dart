@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:oruphones/src/app/services/notifications_service.dart';
 import 'package:oruphones/src/data/repository/repository.dart';
 import 'package:oruphones/src/features/features.dart';
 import 'package:oruphones/src/presentation/presentation.dart';
-import 'package:oruphones/src/ui/colors.dart';
+import 'package:oruphones/src/ui/theme.dart';
 
 class AppEntry extends StatelessWidget {
   const AppEntry({
     super.key,
+    required this.notificationService,
   });
+
+  final NotificationsI notificationService;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,9 @@ class AppEntry extends StatelessWidget {
         client: http.Client(),
       ),
       child: BlocProvider(
-        create: (_) => AppBloc(),
+        create: (_) => AppBloc(
+          notificationService: notificationService,
+        )..add(const AppFCMStarted()),
         child: const _AppView(),
       ),
     );
@@ -30,35 +36,7 @@ class _AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          backgroundColor: OruColors.primary,
-          iconTheme: IconThemeData(color: OruColors.appBarIcon),
-        ),
-        cardTheme: const CardTheme(
-          elevation: 0,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            foregroundColor: Colors.grey,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  5,
-                ),
-              ),
-              side: BorderSide(
-                color: Colors.grey,
-                width: 1.5,
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
-        ),
-      ),
+      theme: oruTheme,
       home: const HomePage(),
     );
   }
