@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:oruphones/src/app/services/notifications_service.dart';
 import 'package:oruphones/src/data/repository/repository.dart';
 import 'package:oruphones/src/features/features.dart';
+import 'package:oruphones/src/presentation/notifications/notifications.dart';
 import 'package:oruphones/src/presentation/presentation.dart';
 import 'package:oruphones/src/ui/theme.dart';
 
@@ -37,7 +38,17 @@ class _AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: oruTheme,
-      home: const HomePage(),
+      home: BlocListener<AppBloc, AppState>(
+        listener: (context, state) {
+          if (state is MessageReceived) {
+            Navigator.push(
+              context,
+              NotificationsPage.route(),
+            );
+          }
+        },
+        child: const HomePage(),
+      ),
     );
   }
 }

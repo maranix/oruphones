@@ -11,3 +11,15 @@ final class AppInitial extends AppState {
   const AppInitial();
 }
 
+final class MessageReceived extends AppState {
+  const MessageReceived({
+    required this.message,
+  });
+
+  final RemoteMessage message;
+
+  @override
+  List<Object?> get props => [
+        message,
+      ];
+}
