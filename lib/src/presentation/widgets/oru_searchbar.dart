@@ -62,7 +62,8 @@ class _OruSearchBarState extends State<OruSearchBar> {
           child: const Icon(Icons.cancel),
         )
       ],
-      hintStyle: MaterialStatePropertyAll<TextStyle>(Theme.of(context).textTheme.bodyMedium!),
+      hintStyle: MaterialStatePropertyAll<TextStyle>(
+          Theme.of(context).textTheme.bodyMedium!),
       padding: const MaterialStatePropertyAll<EdgeInsetsGeometry>(
         OruPadding.searchBarInner,
       ),
