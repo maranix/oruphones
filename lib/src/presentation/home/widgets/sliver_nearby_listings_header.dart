@@ -12,7 +12,10 @@ class SliverNearbyListingsHeader extends StatelessWidget {
         children: [
           RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
               children: const [
                 TextSpan(text: 'Best Deals Near You\t\t'),
                 TextSpan(
