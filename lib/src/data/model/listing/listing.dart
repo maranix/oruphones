@@ -28,8 +28,8 @@ final class Listing extends Equatable {
   final String deviceCondition;
   final String listedBy;
   final String deviceStorage;
-  final List<Image> images;
-  final Image defaultImage;
+  final List<ListingImage> images;
+  final ListingImage defaultImage;
   final String listingLocation;
   final String make;
   final String marketingName;
@@ -67,8 +67,8 @@ final class Listing extends Equatable {
           'listingNumPrice': int listingNumPrice,
           'listingState': String listingState,
         }) {
-      final listingImages = List<Image>.unmodifiable(
-        images.map((e) => Image.fromJson(
+      final listingImages = List<ListingImage>.unmodifiable(
+        images.map((e) => ListingImage.fromJson(
               e as Map<String, dynamic>,
             )),
       );
@@ -83,7 +83,7 @@ final class Listing extends Equatable {
         listedBy: listedBy,
         deviceStorage: deviceStorage,
         images: listingImages,
-        defaultImage: Image.fromJson(defaultImage),
+        defaultImage: ListingImage.fromJson(defaultImage),
         listingLocation: listingLocation,
         make: make,
         marketingName: marketingName,
@@ -131,19 +131,19 @@ final class Listing extends Equatable {
       ];
 }
 
-final class Image extends Equatable {
-  const Image({
+final class ListingImage extends Equatable {
+  const ListingImage({
     required this.fullImage,
   });
 
   final String fullImage;
 
-  factory Image.fromJson(Map<String, dynamic> json) {
+  factory ListingImage.fromJson(Map<String, dynamic> json) {
     if (json
         case {
           'fullImage': String fullImage,
         }) {
-      return Image(
+      return ListingImage(
         fullImage: fullImage,
       );
     } else {
