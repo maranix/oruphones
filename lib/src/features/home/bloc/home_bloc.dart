@@ -7,8 +7,8 @@ import 'package:oruphones/src/data/repository/assignment/assignment.dart';
 import 'package:oruphones/src/features/home/home.dart';
 import 'package:oruphones/src/utils/utils.dart';
 
-part 'home_state.dart';
 part 'home_event.dart';
+part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({
@@ -37,7 +37,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeMoreListingsFetched event,
     Emitter<HomeState> emit,
   ) async {
-    emit(const HomeLoadingMore());
+    final currentListings = _getCurrentListingResponse(state: state);
+
+    emit(HomeLoadingMore(currentListings));
 
     final result = await _repo.getListings(
       page: _getNextPageFromCurrentState(state),
@@ -52,7 +54,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             ),
           ),
         ),
-      ResultFailure() => emit(_handleException(exception: result.err)),
+      ResultFailure() => emit(
+          _handleException(exception: result.err),
+        ),
     };
   }
 
@@ -67,16 +71,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required ListingResponse response,
     required HomeState state,
   }) {
-    final oldListings = switch (state) {
-      HomeLoaded() => state.data.listings,
-      _ => [],
-    };
+    final oldListings = _getCurrentListingResponse(state: state).listings;
+
+    final listings = List<Listing>.unmodifiable(
+      [...oldListings, ...response.listings],
+    );
 
     return response.copyWith(
-      listings: List.unmodifiable(
-        [...response.listings, ...oldListings],
-      ),
+      listings: listings,
     );
+  }
+
+  ListingResponse _getCurrentListingResponse({
+    required HomeState state,
+  }) {
+    return switch (state) {
+      HomeLoaded() => state.data,
+      HomeLoadingMore() => state.data,
+      _ => const ListingResponse(
+          listings: [],
+          message: "",
+          nextPage: 11,
+        ),
+    };
   }
 
   HomeState _handleException({

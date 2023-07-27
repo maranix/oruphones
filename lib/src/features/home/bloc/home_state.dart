@@ -16,7 +16,12 @@ final class HomeLoading extends HomeState {
 }
 
 final class HomeLoadingMore extends HomeState {
-  const HomeLoadingMore();
+  const HomeLoadingMore(this.data);
+
+  final ListingResponse data;
+
+  @override
+  List<Object?> get props => [data];
 }
 
 final class HomeLoaded extends HomeState {

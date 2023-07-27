@@ -13,6 +13,7 @@ class SliverNearbyListings extends StatelessWidget {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) => switch (state) {
         HomeLoaded() => SliverGrid(
+            key: ValueKey(state.data.hashCode),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.65,
@@ -21,13 +22,29 @@ class SliverNearbyListings extends StatelessWidget {
             ),
             delegate: SliverChildBuilderDelegate(
               childCount: state.data.listings.length,
-              (context, index) => SliverNearbyListingItem(
+              (context, index) => NearbyListingItem(
                 key: ObjectKey(state.data.listings[index]),
                 listing: state.data.listings[index],
               ),
             ),
           ),
-        HomeLoading() => const SliverFillRemaining(
+        HomeLoadingMore() => SliverGrid(
+            key: ValueKey(state.data.hashCode),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.65,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              childCount: state.data.listings.length,
+              (context, index) => NearbyListingItem(
+                key: ObjectKey(state.data.listings[index]),
+                listing: state.data.listings[index],
+              ),
+            ),
+          ),
+        HomeLoading() || HomeInitial() => const SliverFillRemaining(
             child: Center(
               child: CircularProgressIndicator.adaptive(),
             ),
@@ -42,8 +59,8 @@ class SliverNearbyListings extends StatelessWidget {
   }
 }
 
-class SliverNearbyListingItem extends StatelessWidget {
-  const SliverNearbyListingItem({
+class NearbyListingItem extends StatelessWidget {
+  const NearbyListingItem({
     super.key,
     required this.listing,
   });
