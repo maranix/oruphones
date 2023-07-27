@@ -20,6 +20,10 @@ class HomeView extends StatelessWidget {
             padding: OruPadding.kDefault,
             sliver: SliverNearbyListings(),
           ),
+          SliverPadding(
+            padding: OruPadding.kDefault,
+            sliver: SliverLoadMoreButton(),
+          ),
         ],
       ),
     );
