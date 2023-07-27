@@ -43,12 +43,8 @@ class OruAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const AppBarNotificationsButton(),
               ],
             ),
-            const Spacer(),
             const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 4,
-              ),
+              padding: OruPadding.searchBarOuter,
               child: OruSearchBar(),
             ),
           ],

@@ -37,7 +37,7 @@ final class Listing extends Equatable {
   final String model;
   final bool verified;
   final String status;
-  final String listingDate;
+  final DateTime listingDate;
   final String deviceRam;
   final DateTime createdAt;
   final String listingId;
@@ -73,9 +73,11 @@ final class Listing extends Equatable {
             )),
       );
 
-      final dateFormat = DateFormat("MM/dd/yyyy'T'HH:mm:ss.SSS'Z'");
+      final listingDateFormat = DateFormat('MM/dd/yyyy');
+      final createdDateFormat = DateFormat("MM/dd/yyyy'T'HH:mm:ss.SSS'Z'");
 
-      final createdTime = dateFormat.parseUtc(createdAt);
+      final createdTime = createdDateFormat.parseUtc(createdAt);
+      final dateListed = listingDateFormat.parseUtc(listingDate);
 
       return Listing(
         id: id,
@@ -91,7 +93,7 @@ final class Listing extends Equatable {
         model: model,
         verified: verified,
         status: status,
-        listingDate: listingDate,
+        listingDate: dateListed,
         deviceRam: deviceRam,
         createdAt: createdTime,
         listingId: listingId,

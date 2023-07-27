@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oruphones/src/ui/padding.dart';
 
 class OruSearchBar extends StatefulWidget {
   const OruSearchBar({
@@ -34,6 +35,11 @@ class _OruSearchBarState extends State<OruSearchBar> {
       controller: _controller,
       onChanged: _onChanged,
       leading: const Icon(Icons.search),
+      hintStyle: MaterialStatePropertyAll<TextStyle>(Theme.of(context).textTheme.bodyMedium!),
+      padding: const MaterialStatePropertyAll<EdgeInsetsGeometry>(
+        OruPadding.searchBarInner,
+      ),
+      constraints: const BoxConstraints(maxHeight: 45),
       hintText: 'Search with make and model..',
       shape: MaterialStatePropertyAll<OutlinedBorder>(
         RoundedRectangleBorder(
