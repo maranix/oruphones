@@ -8,10 +8,14 @@ class OruAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.appBarHeight = kToolbarHeight * 2,
     this.iconColor = Colors.white,
+    this.onSearchBarTap,
+    this.shouldFocusSearchBar = false,
   });
 
   final double appBarHeight;
   final Color iconColor;
+  final VoidCallback? onSearchBarTap;
+  final bool shouldFocusSearchBar;
 
   @override
   Size get preferredSize => Size.fromHeight(appBarHeight);
@@ -19,6 +23,7 @@ class OruAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       flexibleSpace: SafeArea(
         child: Column(
           children: [
@@ -43,9 +48,12 @@ class OruAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const AppBarNotificationsButton(),
               ],
             ),
-            const Padding(
+            Padding(
               padding: OruPadding.searchBarOuter,
-              child: OruSearchBar(),
+              child: OruSearchBar(
+                onTap: onSearchBarTap,
+                shouldFocusSearch: shouldFocusSearchBar,
+              ),
             ),
           ],
         ),
