@@ -26,10 +26,16 @@ class SliverNearbyListings extends StatelessWidget {
               ),
             ),
           ),
-        HomeLoading() => const SliverToBoxAdapter(
-            child: CircularProgressIndicator.adaptive(),
+        HomeLoading() => const SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
           ),
-        _ => const Text('Something went wrong'),
+        _ => const SliverFillRemaining(
+            child: Center(
+              child: Text('Something went wrong'),
+            ),
+          ),
       },
     );
   }
