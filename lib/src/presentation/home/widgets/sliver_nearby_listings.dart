@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:oruphones/src/data/model/model.dart';
@@ -62,9 +63,16 @@ class SliverNearbyListingItem extends StatelessWidget {
               children: [
                 AspectRatio(
                   aspectRatio: 0.9,
-                  child: Image.network(
-                    listing.defaultImage.fullImage,
+                  child: CachedNetworkImage(
+                    imageUrl: listing.defaultImage.fullImage,
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     fit: BoxFit.contain,
+                    memCacheHeight: 200,
+                    memCacheWidth: 200,
+                    maxHeightDiskCache: 200,
+                    maxWidthDiskCache: 200,
                   ),
                 ),
                 const Positioned(
