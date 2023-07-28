@@ -41,10 +41,12 @@ class _AppView extends StatelessWidget {
       home: BlocListener<AppBloc, AppState>(
         listener: (context, state) {
           if (state is MessageReceived) {
-            Navigator.push(
-              context,
-              NotificationsPage.route(),
-            );
+            if (state.payload['screen'] == 'notifications') {
+              Navigator.push(
+                context,
+                NotificationsPage.route(),
+              );
+            }
           }
         },
         child: const HomePage(),

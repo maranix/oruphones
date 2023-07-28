@@ -18,20 +18,27 @@ final class AppInitial extends AppState {
   const AppInitial();
 }
 
+// Define a subclass 'AppNotificationsListening' of 'AppState'.
+// This class represents the state when the app is listening for notifications.
+final class AppNotificationsListening extends AppState {
+  // Constructor for the 'AppNotificationsListening' class.
+  const AppNotificationsListening();
+}
+
 // Define a subclass 'MessageReceived' of 'AppState'.
 // This class represents the state when a message is received by the app.
 final class MessageReceived extends AppState {
   // Constructor for the 'MessageReceived' class.
   const MessageReceived({
-    required this.message,
+    required this.payload,
   });
 
   // Field to store the received remote message.
-  final RemoteMessage message;
+  final Map<String, dynamic> payload;
 
-  // Override the 'props' getter to ensure object equality comparison with the 'message' field.
+  // Override the 'props' getter to ensure object equality comparison with the 'payload' field.
   @override
   List<Object?> get props => [
-        message,
+        payload,
       ];
 }
