@@ -82,9 +82,12 @@ class NearbyListingItem extends StatelessWidget {
                   aspectRatio: 0.9,
                   child: CachedNetworkImage(
                     imageUrl: listing.defaultImage.fullImage,
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress)),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                     fit: BoxFit.contain,
                     memCacheHeight: 200,
                     memCacheWidth: 200,
@@ -132,11 +135,11 @@ class NearbyListingItem extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  'Condition: ${listing.deviceCondition}',
+                  listing.deviceCondition,
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         fontSize: 10,
                       ),
-                ),
+                )
               ],
             ),
             const Spacer(flex: 2),
