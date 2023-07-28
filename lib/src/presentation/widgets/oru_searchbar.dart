@@ -20,8 +20,15 @@ class OruSearchBar extends StatefulWidget {
 }
 
 class _OruSearchBarState extends State<OruSearchBar> {
+  bool shouldShowClearButton = false;
   late final TextEditingController _controller;
   FocusNode? _focusNode;
+
+  _shouldDisplayClearButton() {
+    setState(() {
+      shouldShowClearButton = _controller.text.isNotEmpty;
+    });
+  }
 
   @override
   void initState() {
@@ -33,11 +40,15 @@ class _OruSearchBarState extends State<OruSearchBar> {
       _focusNode = FocusNode();
       _focusNode?.requestFocus();
     }
+
+    _controller.addListener(_shouldDisplayClearButton);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller
+      ..removeListener(_shouldDisplayClearButton)
+      ..dispose();
     _focusNode?.dispose();
 
     super.dispose();
@@ -52,15 +63,16 @@ class _OruSearchBarState extends State<OruSearchBar> {
       onTap: widget.onTap,
       leading: const Icon(Icons.search),
       trailing: [
-        GestureDetector(
-          onTap: () {
-            if (widget.onLeadingTap != null) {
-              _controller.clear();
-              widget.onLeadingTap!();
-            }
-          },
-          child: const Icon(Icons.cancel),
-        )
+        if (shouldShowClearButton)
+          GestureDetector(
+            onTap: () {
+              if (widget.onLeadingTap != null) {
+                _controller.clear();
+                widget.onLeadingTap!();
+              }
+            },
+            child: const Icon(Icons.cancel),
+          )
       ],
       hintStyle: MaterialStatePropertyAll<TextStyle>(
           Theme.of(context).textTheme.bodyMedium!),
