@@ -13,8 +13,8 @@ sealed class HomeEvent extends Equatable {
 
 // Define a subclass 'HomeListingsFetched' of 'HomeEvent'.
 // This class represents the event when the initial home listings are fetched.
-final class HomeListingsFetched extends HomeEvent {
-  const HomeListingsFetched();
+final class HomeFetched extends HomeEvent {
+  const HomeFetched();
 }
 
 // Define a subclass 'HomeMoreListingsFetched' of 'HomeEvent'.

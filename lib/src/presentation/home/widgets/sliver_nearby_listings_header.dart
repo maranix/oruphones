@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oruphones/src/features/features.dart';
 import 'package:oruphones/src/presentation/home/widgets/widgets.dart';
 import 'package:oruphones/src/ui/colors.dart';
 
@@ -36,7 +37,9 @@ class SliverNearbyListingsHeader extends StatelessWidget {
                 'Filter',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const FiltersBottomModal(),
+              FiltersBottomModal(
+                bloc: context.read<HomeBloc>(),
+              ),
             ],
           ),
         ],

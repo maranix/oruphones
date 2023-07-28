@@ -29,28 +29,46 @@ final class HomeLoading extends HomeState {
 // This class represents the state when more home listings are being fetched.
 final class HomeLoadingMore extends HomeState {
   // Constructor for the 'HomeLoadingMore' class.
-  const HomeLoadingMore(this.data);
+  const HomeLoadingMore({required this.listingData, required this.filters});
 
-  // A variable to store the listing response data.
-  final ListingResponse data;
+  // Listing data.
+  final ListingResponse listingData;
+
+  final Filters filters;
 
   // Override the 'props' getter to ensure object equality comparison.
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [listingData, filters];
 }
 
 // Define a subclass 'HomeLoaded' of 'HomeState'.
 // This class represents the state when home listings have been successfully loaded.
 final class HomeLoaded extends HomeState {
   // Constructor for the 'HomeLoaded' class.
-  const HomeLoaded(this.data);
+  const HomeLoaded({
+    required this.data,
+    required this.filters,
+  });
 
   // A variable to store the listing response data.
   final ListingResponse data;
 
+  // Filters data.
+  final Filters filters;
+
+  HomeLoaded copyWith({
+    ListingResponse? data,
+    Filters? filters,
+  }) {
+    return HomeLoaded(
+      data: data ?? this.data,
+      filters: filters ?? this.filters,
+    );
+  }
+
   // Override the 'props' getter to ensure object equality comparison.
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, filters];
 }
 
 // Define a subclass 'HomeFailed' of 'HomeState'.

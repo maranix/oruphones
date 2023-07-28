@@ -29,7 +29,7 @@ class SliverNearbyListings extends StatelessWidget {
             ),
           ),
         HomeLoadingMore() => SliverGrid(
-            key: ValueKey(state.data.hashCode),
+            key: ValueKey(state.listingData.hashCode),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.65,
@@ -37,10 +37,10 @@ class SliverNearbyListings extends StatelessWidget {
               crossAxisSpacing: 8,
             ),
             delegate: SliverChildBuilderDelegate(
-              childCount: state.data.listings.length,
+              childCount: state.listingData.listings.length,
               (context, index) => NearbyListingItem(
-                key: ObjectKey(state.data.listings[index]),
-                listing: state.data.listings[index],
+                key: ObjectKey(state.listingData.listings[index]),
+                listing: state.listingData.listings[index],
               ),
             ),
           ),
@@ -82,12 +82,9 @@ class NearbyListingItem extends StatelessWidget {
                   aspectRatio: 0.9,
                   child: CachedNetworkImage(
                     imageUrl: listing.defaultImage.fullImage,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                                value: downloadProgress.progress)),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     fit: BoxFit.contain,
                     memCacheHeight: 200,
                     memCacheWidth: 200,

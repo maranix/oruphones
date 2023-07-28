@@ -23,26 +23,47 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   })  : _repo = repo,
         super(const HomeInitial()) {
     // Register event handlers using the 'on' method.
-    on<HomeListingsFetched>(_onListingsFetched);
+    on<HomeFetched>(_onListingsFetched);
     on<HomeMoreListingsFetched>(_onMoreListingsFetched);
   }
 
   // Method to handle the 'HomeListingsFetched' event.
   // This method is called when the 'HomeListingsFetched' event is triggered.
   Future<void> _onListingsFetched(
-    HomeListingsFetched event,
+    HomeFetched event,
     Emitter<HomeState> emit,
   ) async {
     emit(const HomeLoading());
 
-    // Fetch the initial listings from the repository.
-    final result = await _repo.getListings();
+    final result = await Future.wait([
+      _repo.getListings(),
+      _repo.getFilters(),
+    ]);
+
+    final listingsResult = result.whereType<Result<ListingResponse>>().first;
+    final filtersResult = result.whereType<Result<Filters>>().first;
 
     // Handle the result based on success or failure.
-    return switch (result) {
-      ResultSuccess() => emit(HomeLoaded(result.value)),
-      ResultFailure() => emit(_handleException(exception: result.err)),
-    };
+    try {
+      final listings = switch (listingsResult) {
+        ResultSuccess() => listingsResult.value,
+        ResultFailure() => throw listingsResult.err
+      };
+
+      final filters = switch (filtersResult) {
+        ResultSuccess() => filtersResult.value,
+        ResultFailure() => throw filtersResult.err,
+      };
+
+      emit(
+        HomeLoaded(
+          data: listings,
+          filters: filters,
+        ),
+      );
+    } on Exception catch (e) {
+      emit(_handleException(exception: e));
+    }
   }
 
   // Method to handle the 'HomeMoreListingsFetched' event.
@@ -52,10 +73,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     // Get the current listings from the current state.
-    final currentListings = _getCurrentListingResponse(state: state);
+    final currentListings = _getCurrentListings(state: state);
+
+    // Get the current filters from the current state.
+    final currentFilters = _getCurrentFilters(state: state);
 
     // Emit the 'HomeLoadingMore' state with the current listings.
-    emit(HomeLoadingMore(currentListings));
+    emit(HomeLoadingMore(listingData: currentListings, filters: currentFilters));
 
     // Fetch more listings from the repository with the next page number.
     final result = await _repo.getListings(
@@ -63,19 +87,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     // Handle the result based on success or failure.
-    return switch (result) {
-      ResultSuccess() => emit(
-          HomeLoaded(
-            _getNewListingsFromResponse(
-              response: result.value,
-              state: state,
-            ),
+    try {
+      final newListings = switch (result) {
+        ResultSuccess() => _getNewListingsFromResponse(
+            response: result.value,
+            state: state,
           ),
-        ),
-      ResultFailure() => emit(
-          _handleException(exception: result.err),
-        ),
-    };
+        ResultFailure() => throw Exception(),
+      };
+
+      emit(HomeLoaded(data: newListings, filters: currentFilters));
+    } on Exception catch (e) {
+      emit(_handleException(exception: e));
+    }
   }
 
   // Method to get the next page number from the current state.
@@ -91,7 +115,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required ListingResponse response,
     required HomeState state,
   }) {
-    final oldListings = _getCurrentListingResponse(state: state).listings;
+    final oldListings = _getCurrentListings(state: state).listings;
 
     // Merge the old listings with the new listings from the response.
     final listings = List<Listing>.unmodifiable(
@@ -105,16 +129,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   // Method to get the current listing response from the current state.
-  ListingResponse _getCurrentListingResponse({
+  ListingResponse _getCurrentListings({
     required HomeState state,
   }) {
     return switch (state) {
       HomeLoaded() => state.data,
-      HomeLoadingMore() => state.data,
+      HomeLoadingMore() => state.listingData,
       _ => const ListingResponse(
           listings: [],
           message: "",
           nextPage: 11,
+        ),
+    };
+  }
+
+  // Method to get the current filters response from the current state.
+  Filters _getCurrentFilters({
+    required HomeState state,
+  }) {
+    return switch (state) {
+      HomeLoaded() => state.filters,
+      HomeLoadingMore() => state.filters,
+      _ => const Filters(
+          make: [],
+          condition: [],
+          ram: [],
+          storage: [],
         ),
     };
   }
