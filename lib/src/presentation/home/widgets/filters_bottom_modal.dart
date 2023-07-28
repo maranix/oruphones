@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:oruphones/src/features/home/home.dart';
+import 'package:oruphones/src/ui/colors.dart';
 
 class FiltersBottomModal extends StatelessWidget {
   const FiltersBottomModal({
@@ -30,41 +31,57 @@ class FiltersBottomModal extends StatelessWidget {
             child: BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) => switch (state) {
                 HomeLoaded() => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const Text('Ram'),
-                            Flexible(
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: state.filters.make.length,
-                                itemBuilder: (context, index) => FilterChip(
-                                  label: Text(state.filters.make[index]),
-                                  onSelected: (_) {},
-                                ),
-                              ),
+                      Row(
+                        children: [
+                          Text(
+                            'Filters',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          const Spacer(),
+                          const Text(
+                            'Clear Filter',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              decoration: TextDecoration.underline,
+                              decorationThickness: 2,
                             ),
-                          ],
+                          )
+                        ],
+                      ),
+                      FilterCategory(
+                        title: 'Brand',
+                        data: state.filters.make,
+                      ),
+                      FilterCategory(
+                        title: 'Ram',
+                        data: state.filters.ram,
+                      ),
+                      FilterCategory(
+                        title: 'Storage',
+                        data: state.filters.storage,
+                      ),
+                      FilterCategory(
+                        title: 'Condition',
+                        data: state.filters.condition,
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: OruColors.primary,
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          'Apply',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: Colors.white),
                         ),
                       ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const Text('Ram'),
-                            Flexible(
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: state.filters.ram.length,
-                                itemBuilder: (context, index) => FilterChip(
-                                  label: Text(state.filters.ram[index]),
-                                  onSelected: (_) {},
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 HomeLoading() => const Center(
@@ -90,7 +107,9 @@ class FiltersBottomModal extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 icon: const Icon(
-                  Icons.close,
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                  size: 36,
                 ),
               ),
               child,
@@ -99,6 +118,58 @@ class FiltersBottomModal extends StatelessWidget {
         ),
       ),
       icon: const Icon(Icons.sort),
+    );
+  }
+}
+
+class FilterCategory extends StatelessWidget {
+  const FilterCategory({
+    super.key,
+    required this.title,
+    required this.data,
+  });
+
+  final String title;
+  final List<String> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        SizedBox(
+          height: 60,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: data.length,
+            itemBuilder: (context, index) => FilterChip(
+              backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    12,
+                  ),
+                ),
+              ),
+              key: ValueKey(data[index]),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              label: Text(data[index]),
+              onSelected: (bool value) {},
+            ),
+            separatorBuilder: (context, index) => const SizedBox(
+              width: 12,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
