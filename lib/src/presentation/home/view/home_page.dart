@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
     final repo = context.read<AssignmentRepository>();
 
     return BlocProvider(
-      create: (_) => HomeBloc(repo: repo)..add(const HomeListingsFetched()),
+      create: (_) => HomeBloc(repo: repo),
       child: const HomeView(),
     );
   }
